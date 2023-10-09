@@ -19,7 +19,7 @@ import { WriteContract } from "../components/WriteContract";
 import { WriteContractPrepared } from "../components/WriteContractPrepared";
 import ButtonUsage from "../Home/page";
 import Navbar from "../pages/Navbar";
-export function Page() {
+ function Page() {
   return (
     <>
       <Navbar />
