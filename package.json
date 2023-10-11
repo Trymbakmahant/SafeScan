@@ -16,9 +16,13 @@
     "@mui/material": "^5.14.12",
     "@mui/styled-engine-sc": "^5.14.12",
     "@rainbow-me/rainbowkit": "^1.0.0",
+    "encoding": "^0.1.13",
+    "lokijs": "^1.5.12",
     "next": "^13.4.0",
+    "pino-pretty": "^10.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "sass": "^1.69.1",
     "styled-components": "^6.0.8",
     "viem": "~0.3.36",
     "wagmi": "^1.0.6"

@@ -1,0 +1,9 @@
+.Dataribbon {
+  display: flex;
+  text-align: center;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  @media screen and (min-width: 1200px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
