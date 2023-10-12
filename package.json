@@ -16,6 +16,12 @@
     "@mui/material": "^5.14.12",
     "@mui/styled-engine-sc": "^5.14.12",
     "@rainbow-me/rainbowkit": "^1.0.0",
+    "@safe-global/auth-kit": "^1.2.1",
+    "@web3auth/base": "^4.3.0",
+    "@web3auth/modal": "^4.3.1",
+    "@web3auth/openlogin-adapter": "^4.3.0",
+    "encoding": "^0.1.13",
+    "lokijs": "^1.5.12",
     "next": "^13.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -24,6 +30,7 @@
     "wagmi": "^1.0.6"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.5",
     "@types/node": "^17.0.31",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.3",
