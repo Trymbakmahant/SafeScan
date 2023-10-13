@@ -2,10 +2,10 @@ import { IAdapter, UserInfo } from "@web3auth/base";
 import { ModalConfig, Web3Auth, Web3AuthOptions } from "@web3auth/modal";
 import { ExternalProvider } from "@ethersproject/providers";
 
-import { getErrorMessage } from "@safe-global/auth-kit/lib/errors";
+import { getErrorMessage } from "../lib/errors";
 import { Web3AuthConfig, Web3AuthEvent, Web3AuthEventListener } from "./types";
-import { AuthKitBasePack } from "@safe-global/auth-kit/AuthKitBasePack";
-import type { AuthKitSignInData } from "@safe-global/auth-kit/types";
+import { AuthKitBasePack } from "../AuthKitBasePack";
+import type { AuthKitSignInData } from "../types";
 
 /**
  * Web3AuthModalPack implements the SafeAuthClient interface for adapting the Web3Auth service provider

@@ -1,224 +1,116 @@
-import { Web3AuthModalPack } from "./Web3AuthModalPack";
-import { generateTestingUtils } from "eth-testing";
-import EventEmitter from "events";
-import {
-  ADAPTER_EVENTS,
-  CHAIN_NAMESPACES,
-  WALLET_ADAPTERS,
-} from "@web3auth/base";
-import { Web3AuthOptions } from "@web3auth/modal";
-import { AuthKitBasePack } from "../../AuthKitBasePack";
+import { ethers } from "ethers";
+import SafeApiKit from "@safe-global/api-kit";
+import { EthersAdapter } from "@safe-global/protocol-kit";
 
-const testingUtils = generateTestingUtils({ providerType: "MetaMask" });
-const mockProvider = testingUtils.getProvider();
-const mockInitModal = jest.fn();
-const mockConnect = jest.fn().mockImplementation(() => {
-  eventEmitter.emit(ADAPTER_EVENTS.CONNECTED);
-  return Promise.resolve(mockProvider);
-});
-const eventEmitter = new EventEmitter();
-const mockConfigureAdapter = jest.fn();
-const mockLogout = jest
-  .fn()
-  .mockImplementation(() => eventEmitter.emit(ADAPTER_EVENTS.DISCONNECTED));
-const mockAddEventListener = jest
-  .fn()
-  .mockImplementation((event, listener) => eventEmitter.on(event, listener));
-const mockRemoveEventListener = jest
-  .fn()
-  .mockImplementation((event, listener) => eventEmitter.off(event, listener));
+import type { AuthKitSignInData } from "./types";
 
-jest.mock("@safe-global/api-kit", () => {
-  return jest.fn().mockImplementation(() => {
-    return {
-      getSafesByOwner: jest.fn().mockImplementation(() => {
-        return Promise.resolve({ safes: ["0xSafe1", "0xSafe2"] });
-      }),
-    };
-  });
-});
+export abstract class AuthKitBasePack {
+  safeAuthData?: AuthKitSignInData;
 
-jest.mock("@web3auth/modal", () => {
-  return {
-    Web3Auth: jest.fn().mockImplementation(() => {
-      return {
-        getProvider: jest.fn().mockReturnValue(mockProvider),
-        initModal: mockInitModal,
-        connect: mockConnect,
-        configureAdapter: mockConfigureAdapter,
-        logout: mockLogout,
-        on: mockAddEventListener,
-        off: mockRemoveEventListener,
-        getUserInfo: jest.fn().mockResolvedValue({
-          email: "mockMail@mail.com",
-        }),
-      };
-    }),
-  };
-});
+  /**
+   * Initialize the pack
+   * @param options The provider specific options
+   */
+  abstract init(options?: unknown): Promise<void>;
 
-const web3AuthOptions: Web3AuthOptions = {
-  clientId: "123",
-  web3AuthNetwork: "testnet",
-  chainConfig: {
-    chainNamespace: CHAIN_NAMESPACES.EIP155,
-    chainId: "0x5",
-    rpcTarget: `https://goerli.infura.io/v3/api-key`,
-  },
-};
+  /**
+   * Start the sign in flow in the pack
+   * @returns The sign in data from the provider
+   */
+  abstract signIn(): Promise<AuthKitSignInData>;
 
-const modalConfig = {
-  [WALLET_ADAPTERS.METAMASK]: {
-    label: "metamask",
-    showOnDesktop: true,
-    showOnMobile: false,
-  },
-};
+  /**
+   * Start the sign out flow in the pack
+   */
+  abstract signOut(): Promise<void>;
 
-describe("Web3AuthModalPack", () => {
-  let web3AuthModalPack: Web3AuthModalPack;
+  /**
+   * Get the provider instance based on the pack
+   * @returns The provider instance
+   */
+  abstract getProvider(): ethers.providers.ExternalProvider | null;
 
-  beforeAll(async () => {
-    web3AuthModalPack = new Web3AuthModalPack({
-      txServiceUrl: "https://txservice-url.com",
+  /**
+   * Get the user info from the provider
+   * @returns The user info from the provider
+   */
+  abstract getUserInfo(): Promise<unknown>;
+
+  /**
+   * Subscribe to an event
+   * @param event  The event to subscribe to
+   * @param handler  The handler to be called when the event is triggered
+   */
+  abstract subscribe(event: unknown, handler: unknown): void;
+
+  /**
+   * Unsubscribe from an event
+   * @param event  The event to unsubscribe from
+   * @param handler The handler to be removed from the event
+   */
+  abstract unsubscribe(event: unknown, handler: unknown): void;
+
+  /**
+   * Get the list of Safe addresses owned by the user in the chain
+   * @param txServiceUrl The URL of the Safe Transaction Service
+   * @returns The list of Safe addresses owned by the user in the chain
+   */
+  async getSafes(txServiceUrl: string): Promise<string[]> {
+    const apiKit = this.#getApiKit(txServiceUrl);
+
+    const address = await this.getAddress();
+
+    try {
+      const safesByOwner = await apiKit.getSafesByOwner(address);
+
+      return safesByOwner.safes;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  /**
+   * Get the owner address from the provider
+   * @returns The signer address
+   */
+  async getAddress(): Promise<string> {
+    if (!this.getProvider()) {
+      throw new Error("Provider is not defined");
+    }
+
+    const ethersProvider = new ethers.providers.Web3Provider(
+      this.getProvider() as ethers.providers.ExternalProvider
+    );
+
+    const signer = ethersProvider.getSigner();
+
+    const address = await signer.getAddress();
+
+    return address;
+  }
+
+  /**
+   * Get the SafeApiKit instance
+   * @returns A SafeApiKit instance
+   */
+  #getApiKit(txServiceUrl: string): SafeApiKit {
+    if (!this.getProvider()) {
+      throw new Error("Provider is not defined");
+    }
+
+    const provider = new ethers.providers.Web3Provider(
+      this.getProvider() as ethers.providers.ExternalProvider
+    );
+    const safeOwner = provider.getSigner(0);
+
+    const adapter = new EthersAdapter({
+      ethers,
+      signerOrProvider: safeOwner,
     });
 
-    await web3AuthModalPack.init({
-      options: web3AuthOptions,
+    return new SafeApiKit({
+      txServiceUrl,
+      ethAdapter: adapter,
     });
-  });
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-    testingUtils.clearAllMocks();
-    mockInitModal.mockClear();
-    mockConnect.mockClear();
-  });
-
-  describe("init()", () => {
-    it("should initialize Web3Auth", async () => {
-      expect(web3AuthModalPack.getProvider()).not.toBeNull();
-      expect(web3AuthModalPack).toBeInstanceOf(Web3AuthModalPack);
-      expect(web3AuthModalPack).toBeInstanceOf(AuthKitBasePack);
-    });
-
-    it("should configure the adapters", async () => {
-      await web3AuthModalPack.init({
-        options: web3AuthOptions,
-        // @ts-expect-error - Does not match IAdapter interface
-        adapters: [jest.fn(), jest.fn()],
-      });
-
-      expect(mockConfigureAdapter).toHaveBeenCalledTimes(2);
-    });
-
-    it("should call initModal()", async () => {
-      await web3AuthModalPack.init({
-        options: web3AuthOptions,
-        modalConfig,
-      });
-
-      expect(mockInitModal).toHaveBeenCalledWith(
-        expect.objectContaining({ modalConfig })
-      );
-    });
-
-    it("should initialize the provider", async () => {
-      testingUtils.mockAccounts(["0xf61B443A155b07D2b2cAeA2d99715dC84E839EEf"]);
-
-      await web3AuthModalPack.init({
-        options: web3AuthOptions,
-        modalConfig,
-      });
-
-      const authKitSignInData = await web3AuthModalPack.signIn();
-
-      expect(web3AuthModalPack.getProvider()).toBe(mockProvider);
-    });
-  });
-
-  describe("signIn()", () => {
-    it("should call the connect() method", async () => {
-      testingUtils.mockAccounts(["0xf61B443A155b07D2b2cAeA2d99715dC84E839EEf"]);
-
-      const authKitSignInData = await web3AuthModalPack.signIn();
-
-      expect(mockConnect).toHaveBeenCalled();
-      expect(authKitSignInData).toEqual({
-        eoa: "0xf61B443A155b07D2b2cAeA2d99715dC84E839EEf",
-        safes: ["0xSafe1", "0xSafe2"],
-      });
-    });
-  });
-
-  describe("signOut()", () => {
-    it("should call the logout() method", async () => {
-      await web3AuthModalPack.signOut();
-
-      expect(web3AuthModalPack.getProvider()).toBeNull();
-      expect(mockLogout).toHaveBeenCalled();
-    });
-  });
-
-  describe("getProvider()", () => {
-    it("should return null if not signed in", async () => {
-      expect(web3AuthModalPack.getProvider()).toBeNull();
-    });
-
-    it("should return the provider after signIn", async () => {
-      testingUtils.mockAccounts(["0xf61B443A155b07D2b2cAeA2d99715dC84E839EEf"]);
-
-      await web3AuthModalPack.signIn();
-
-      expect(web3AuthModalPack.getProvider()).toEqual(mockProvider);
-    });
-  });
-
-  describe("getUserInfo()", () => {
-    it("should return null if not signed in", async () => {
-      expect(await web3AuthModalPack.getUserInfo()).toEqual({
-        email: "mockMail@mail.com",
-      });
-    });
-  });
-
-  describe("subscribe()/unsubscribe()", () => {
-    it("should allow to subscribe to events", async () => {
-      const signedIn = jest.fn();
-      const signedOut = jest.fn();
-
-      web3AuthModalPack.subscribe(ADAPTER_EVENTS.CONNECTED, signedIn);
-      web3AuthModalPack.subscribe(ADAPTER_EVENTS.DISCONNECTED, signedOut);
-
-      testingUtils.mockAccounts(["0xf61B443A155b07D2b2cAeA2d99715dC84E839EEf"]);
-
-      await web3AuthModalPack.signIn();
-
-      expect(signedIn).toHaveBeenCalled();
-
-      await web3AuthModalPack.signOut();
-
-      expect(signedOut).toHaveBeenCalled();
-    });
-
-    it("should allow to unsubscribe to events", async () => {
-      const signedIn = jest.fn();
-      const signedOut = jest.fn();
-
-      web3AuthModalPack.subscribe(ADAPTER_EVENTS.CONNECTED, signedIn);
-      web3AuthModalPack.subscribe(ADAPTER_EVENTS.DISCONNECTED, signedOut);
-      web3AuthModalPack.unsubscribe(ADAPTER_EVENTS.CONNECTED, signedIn);
-      web3AuthModalPack.unsubscribe(ADAPTER_EVENTS.DISCONNECTED, signedOut);
-
-      testingUtils.mockAccounts(["0xf61B443A155b07D2b2cAeA2d99715dC84E839EEf"]);
-
-      await web3AuthModalPack.signIn();
-
-      expect(signedIn).toHaveBeenCalledTimes(0);
-
-      await web3AuthModalPack.signOut();
-
-      expect(signedOut).toHaveBeenCalledTimes(0);
-    });
-  });
-});
+  }
+}

@@ -1,5 +1,5 @@
-export * from "./packs/web3auth/Web3AuthModalPack";
-export * from "./packs/web3auth/types";
+export * from "./web3auth/Web3AuthModalPack";
+export * from "./web3auth/types";
 
-export * from "./AuthKitBasePack";
+export * from "./AuthkitBasePack";
 export * from "./types";
