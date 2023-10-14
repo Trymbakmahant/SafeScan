@@ -18,11 +18,14 @@ import { WatchPendingTransactions } from "../components/WatchPendingTransactions
 import { WriteContract } from "../components/WriteContract";
 import { WriteContractPrepared } from "../components/WriteContractPrepared";
 import ButtonUsage from "../Home/page";
+import BB from "../components/safe/index";
 import Navbar from "../pages/Navbar";
- function Page() {
+
+function Page() {
   return (
     <>
       <Navbar />
+      <BB />
       {/* <h1>wagmi + RainbowKit + Next.js</h1>
 
       <ConnectButton />
