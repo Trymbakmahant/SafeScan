@@ -1,4 +1,5 @@
 "use client";
+import { useRef } from "react";
 import { Account } from "../components/Account";
 import { Balance } from "../components/Balance";
 import { BlockNumber } from "../components/BlockNumber";
@@ -18,14 +19,17 @@ import { WatchPendingTransactions } from "../components/WatchPendingTransactions
 import { WriteContract } from "../components/WriteContract";
 import { WriteContractPrepared } from "../components/WriteContractPrepared";
 import ButtonUsage from "../Home/page";
-import BB from "../components/safe/index";
+import Testing from "../components/safe/APItesting";
+import LandingPage from "../pages/LandingPage/page";
 import Navbar from "../pages/Navbar";
 
 function Page() {
+  const inputref = useRef<HTMLInputElement | null>(null);
   return (
     <>
       <Navbar />
-      <BB />
+      <LandingPage />
+      <Testing />
       {/* <h1>wagmi + RainbowKit + Next.js</h1>
 
       <ConnectButton />
