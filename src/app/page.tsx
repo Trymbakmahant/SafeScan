@@ -29,7 +29,7 @@ function Page() {
     <>
       <Navbar />
       <LandingPage />
-      <Testing />
+
       {/* <h1>wagmi + RainbowKit + Next.js</h1>
 
       <ConnectButton />

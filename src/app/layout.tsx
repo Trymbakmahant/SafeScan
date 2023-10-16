@@ -4,7 +4,7 @@ import { Providers } from "./providers";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { lime, purple } from "@mui/material/colors";
 import Button from "@mui/material/Button";
-
+import "./layout.css";
 const theme = createTheme({
   palette: {
     mode: "dark",
@@ -24,7 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="body">
         <ThemeProvider theme={theme}>
           <Providers>{children}</Providers>
         </ThemeProvider>
