@@ -1,0 +1,11 @@
+/* Add CSS transitions for the table to create a nice animation */
+.table-entering,
+.table-exiting,
+.table-exited {
+  opacity: 0;
+}
+
+.table-entered {
+  opacity: 1;
+  transition: opacity 300ms;
+}

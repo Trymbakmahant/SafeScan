@@ -1,21 +1,14 @@
 import * as React from "react";
-import ToggleButton from "@mui/material/ToggleButton";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+
 import Card from "@mui/material/Card";
+import Table from "./items";
 import CarouselToggleBar from "./CarouselTogglebar";
-import TablePagination from "@mui/material/TablePagination";
 export default function PinnedSubheaderList() {
   interface ToggleOption {
     label: string;
     value: string;
   }
+
   const options: ToggleOption[] = [
     { label: "Option 1", value: "option1" },
     { label: "Option 2", value: "option2" },
@@ -36,13 +29,18 @@ export default function PinnedSubheaderList() {
   ];
   const [alignment, setAlignment] = React.useState("web");
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [selectedOption, setSelectedOption] = React.useState(options[0].value);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const totalPages = 10;
 
   const handleOptionChange = (value: string) => {
     setSelectedOption(value);
   };
 
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    // You can perform additional actions like fetching data for the new page here
+  };
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
     newAlignment: string
@@ -74,39 +72,7 @@ export default function PinnedSubheaderList() {
     <>
       <Card sx={{ maxWidth: "80%", maxHeight: "40%" }}>
         <CarouselToggleBar options={options} onChange={handleOptionChange} />
-
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Dessert (100g serving)</TableCell>
-                <TableCell align="right">Calories</TableCell>
-                <TableCell align="right">Fat&nbsp;(g)</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow
-                  key={row.sender}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.sender}
-                  </TableCell>
-                  <TableCell align="right">{row.reciver}</TableCell>
-                  <TableCell align="right">{row.amount}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          component="div"
-          count={100}
-          page={page}
-          onPageChange={handleChangePage}
-          rowsPerPage={10}
-        />
+        <Table />
       </Card>
     </>
   );
