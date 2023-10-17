@@ -1,7 +1,11 @@
 .main {
   margin: auto;
   margin-top: 50px;
-  padding: 0px 150px 0px 150px;
+  height: auto;
+  padding: 0px 350px 0px 350px;
+  @media screen and (max-width: 1600px) {
+    padding: 0px 200px 0px 200px;
+  }
   .maindatacard {
     grid-template-columns: 1fr;
 
@@ -10,30 +14,9 @@
       min-width: 45rem;
       grid-template-columns: 1fr 1fr 1fr;
     }
-    table {
-      font-family: arial, sans-serif;
-      border-collapse: collapse;
-      width: 100%;
-      > tr {
-        height: 12px;
-      }
-      > td {
-        border: 1px solid #dddddd;
-        text-align: center;
-        padding: 8px;
-      }
-      > th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
-      }
-      > tr:nth-child(even) {
-        background-color: #dddddd;
-      }
-    }
 
     .datacard {
-      height: 60rem;
+      height: 70rem;
     }
   }
 }
