@@ -108,7 +108,7 @@ function Navbar() {
                 textDecoration: "none",
               }}
             >
-              Web3kart
+              Safe Scan
             </Typography>
 
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -177,12 +177,16 @@ function Navbar() {
                 </Button>
               ))}
               <Box>
-                <Search>
+                <Search
+                  sx={{
+                    minWidth: "250px",
+                  }}
+                >
                   <SearchIconWrapper>
                     <SearchIcon />
                   </SearchIconWrapper>
                   <StyledInputBase
-                    placeholder="Search…"
+                    placeholder="Search by address, ENS or Token symbol"
                     inputProps={{ "aria-label": "search" }}
                   />
                 </Search>
