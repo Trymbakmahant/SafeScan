@@ -22,14 +22,15 @@ import ButtonUsage from "../Home/page";
 import Testing from "../components/safe/APItesting";
 import LandingPage from "../pages/LandingPage/page";
 import Navbar from "../pages/Navbar";
+import SinglePage from "../pages/SinglePage/page";
 
 function Page() {
   const inputref = useRef<HTMLInputElement | null>(null);
   return (
     <>
       <Navbar />
-      <LandingPage />
-
+      {/* <LandingPage />  */}
+      <SinglePage />
       {/* <h1>wagmi + RainbowKit + Next.js</h1>
 
       <ConnectButton />
