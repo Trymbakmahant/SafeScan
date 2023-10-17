@@ -3,7 +3,12 @@ import { Container, Typography, TablePagination } from "@mui/material";
 import ItemList from "./ItemList";
 
 const items = [
-  { id: 1, receiver: "Alice", sender: "Bob", amount: "1" },
+  {
+    id: 1,
+    receiver: "oxwsesfsjkl3i3",
+    sender: "Oxwijwefdje34r432590eefd",
+    amount: "1",
+  },
   { id: 2, receiver: "Charlie", sender: "David", amount: "2" },
   { id: 3, receiver: "Eve", sender: "Frank", amount: "3" },
   { id: 1, receiver: "Alice", sender: "Bob", amount: "4" },
