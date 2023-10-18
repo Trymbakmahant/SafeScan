@@ -18,8 +18,8 @@ const apitesting = () => {
 
   async function hello() {
     try {
-      const safe: any = await getServiceInfo({ signer });
-      console.log(safe);
+      // const safe: any = await getServiceInfo({ signer });
+      console.log("safe");
     } catch (e) {
       console.log(e);
     }
