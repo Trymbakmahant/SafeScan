@@ -111,7 +111,7 @@ function Navbar() {
               Safe Scan
             </Typography>
 
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            {/* <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -146,7 +146,7 @@ function Navbar() {
                   </MenuItem>
                 ))}
               </Menu>
-            </Box>
+            </Box> */}
             <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
             <Typography
               variant="h5"
@@ -164,10 +164,10 @@ function Navbar() {
                 textDecoration: "none",
               }}
             >
-              LOGO
+              Safe Scan
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
+              {/* {pages.map((page) => (
                 <Button
                   key={page}
                   onClick={handleCloseNavMenu}
@@ -175,7 +175,7 @@ function Navbar() {
                 >
                   {page}
                 </Button>
-              ))}
+              ))} */}
               <Box>
                 <Search
                   sx={{
