@@ -19,7 +19,7 @@ import { WatchPendingTransactions } from "../components/WatchPendingTransactions
 import { WriteContract } from "../components/WriteContract";
 import { WriteContractPrepared } from "../components/WriteContractPrepared";
 import ButtonUsage from "../Home/page";
-import Testing from "../components/safe/APItesting";
+import Testing from "../testing/apitesting";
 import LandingPage from "../pages/LandingPage/page";
 import Navbar from "../pages/Navbar";
 import SinglePage from "../pages/SinglePage/page";
@@ -29,7 +29,8 @@ function Page() {
   return (
     <>
       <Navbar />
-      {/* <LandingPage />  */}
+      <Testing />
+      <LandingPage />
       <SinglePage />
       {/* <h1>wagmi + RainbowKit + Next.js</h1>
 
