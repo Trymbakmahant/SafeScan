@@ -1,6 +1,7 @@
 "use client";
 import SafeApiKit from "@safe-global/api-kit";
-import { ethers, JsonRpcProvider, JsonRpcSigner } from "ethers";
+import { ethers, providers } from "ethers";
+import { EthersAdapter } from "@safe-global/protocol-kit/dist/src/adapters/ethers";
 import {
   SafeServiceInfoResponse,
   MasterCopyResponse,
@@ -13,8 +14,6 @@ import {
   SafeModuleTransactionListResponse,
   SafeInfoResponse,
 } from "@safe-global/api-kit";
-import { EthersAdapter } from "@safe-global/protocol-kit/dist/src/adapters/ethers";
-import { useWalletClient } from "wagmi";
 
 export async function getServiceInfo({ safeService }: { safeService: any }) {
   try {
@@ -29,16 +28,48 @@ export async function getServiceInfo({ safeService }: { safeService: any }) {
 
 /// this help to find safe account of the address
 export async function getSafesByOwner({
-  ownerAddress,
+  address,
   safeService,
 }: {
-  ownerAddress: string;
+  address: `0x${string}` | undefined;
   safeService: any;
 }) {
-  const safes: OwnerResponse = await safeService.getSafesByOwner(ownerAddress);
-  return safes;
+  try {
+    console.log(safeService);
+    const safes: OwnerResponse = await safeService.getSafesByOwner(address);
+    return safes;
+  } catch (e) {
+    console.log(e);
+  }
 }
 
+export async function Ownerdetal({
+  signer,
+}: {
+  signer: providers.JsonRpcSigner;
+}) {
+  try {
+    const ethAdapterOwner1 = new EthersAdapter({
+      ethers,
+      signerOrProvider: signer,
+    });
+    const address = "0xa43624b7472c37B1E1884645a3D04710afCD8eB5";
+    const txServiceUrl = "https://safe-transaction-goerli.safe.global";
+
+    const safeService = new SafeApiKit({
+      txServiceUrl,
+      ethAdapter: ethAdapterOwner1,
+    });
+
+    const serviceInfo: OwnerResponse = await safeService.getSafesByOwner(
+      address
+    );
+    console.log(serviceInfo);
+    return serviceInfo;
+  } catch (e) {
+    console.log(e);
+  }
+}
 export async function getMultisigTransaction({
   safeService,
   safeTxHash,
@@ -50,99 +81,106 @@ export async function getMultisigTransaction({
     await safeService.getTransaction(safeTxHash);
   return tx;
 }
+
 export async function getSafeInfo({
   safeService,
-  safeAddress,
+  address,
 }: {
   safeService: any;
-  safeAddress: any;
+  address: any;
 }) {
-  const safeInfo: SafeInfoResponse = await safeService.getSafeInfo(safeAddress);
-  return safeInfo;
+  try {
+    console.log("hello");
+    const safeInfo: SafeInfoResponse = await safeService.getSafeInfo(address);
+    console.log(safeInfo);
+    return safeInfo;
+  } catch (e) {
+    console.log(e);
+  }
 }
 export async function getSafeCreationInfo({
   safeService,
-  safeAddress,
+  address,
 }: {
   safeService: any;
-  safeAddress: string;
+  address: string;
 }) {
   const safeCreationInfo: SafeCreationInfoResponse =
-    await safeService.getSafeCreationInfo(safeAddress);
+    await safeService.getSafeCreationInfo(address);
   return safeCreationInfo;
 }
 export async function SafeTransactionsHistory({
   safeService,
-  safeAddress,
+  address,
 }: {
   safeService: any;
-  safeAddress: string;
+  address: string;
 }) {
   const incomingTxs: TransferListResponse =
-    await safeService.getIncomingTransactions(safeAddress);
+    await safeService.getIncomingTransactions(address);
 
   return incomingTxs;
 }
 export async function ModuleTransactionsHistory({
   safeService,
-  safeAddress,
+  address,
 }: {
   safeService: any;
-  safeAddress: string;
+  address: string;
 }) {
   const moduleTxs: SafeModuleTransactionListResponse =
-    await safeService.getModuleTransactions(safeAddress);
+    await safeService.getModuleTransactions(address);
 
   return moduleTxs;
 }
 
 export async function MultisigTransactionsHistory({
   safeService,
-  safeAddress,
+  address,
 }: {
   safeService: any;
-  safeAddress: string;
+  address: string;
 }) {
   const multisigTxs: SafeMultisigTransactionListResponse =
-    await safeService.getMultisigTransactions(safeAddress);
+    await safeService.getMultisigTransactions(address);
 
   return multisigTxs;
 }
 export async function PendingTransactionsList({
   safeService,
-  safeAddress,
+  address,
 }: {
   safeService: any;
-  safeAddress: string;
+  address: string;
 }) {
   const pendingTxs: SafeMultisigTransactionListResponse =
-    await safeService.getPendingTransactions(safeAddress);
+    await safeService.getPendingTransactions(address);
 
   return pendingTxs;
 }
 export async function AllTransactionList({
   safeService,
-  safeAddress,
+  address,
 }: {
   safeService: any;
-  safeAddress: string;
+  address: string;
 }) {
   const allTxs: SafeMultisigTransactionListResponse =
-    await safeService.getAllTransactions(safeAddress);
+    await safeService.getAllTransactions(address);
   return allTxs;
 }
 
 export async function PendingTransactionsListWithCurrentNonce({
   safeService,
-  safeAddress,
+  address,
   currentNonce,
 }: {
   safeService: any;
-  safeAddress: string;
+  address: string;
   currentNonce: string;
 }) {
   const pendingTxs: SafeMultisigTransactionListResponse =
-    await safeService.getPendingTransactions(safeAddress, currentNonce);
+    await safeService.getPendingTransactions(address, currentNonce);
   return pendingTxs;
 }
 

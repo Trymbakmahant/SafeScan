@@ -1,25 +1,27 @@
 import React from "react";
 // import AKAfunction from "../utils/Safe-Api/safeApp";
-
+import { ethers } from "ethers";
 import SafeApiKit from "@safe-global/api-kit";
-import { getServiceInfo } from "../utils/Safe-Api/safeApp";
+import {
+  getSafeInfo,
+  getServiceInfo,
+  getSafesByOwner,
+  Ownerdetal,
+} from "../utils/Safe-Api/safeApp";
 import { EthersAdapter } from "@safe-global/protocol-kit/dist/src/adapters/ethers";
-import { useWalletClient } from "wagmi";
-import { JsonRpcSigner } from "ethers";
+import { useWalletClient, useAccount } from "wagmi";
+import { providers } from "ethers";
 import { useEthersSigner } from "../utils/hooks/ethersSigner";
 
 const apitesting = () => {
   const { data: walletClient, isError, isLoading } = useWalletClient();
-
-  // Use nonNullableSigner as a JsonRpcSigner.
-
-  const signer: JsonRpcSigner | undefined = useEthersSigner();
-  // https://chainlist.org/?search=goerli&testnets=true
-
+  const signer: any = useEthersSigner();
+  const { address } = useAccount();
+  // const address = "0xa43624b7472c37B1E1884645a3D04710afCD8eB5";
   async function hello() {
     try {
-      // const safe: any = await getServiceInfo({ signer });
-      console.log("safe");
+      const ans = await Ownerdetal({ signer });
+      console.log(ans);
     } catch (e) {
       console.log(e);
     }

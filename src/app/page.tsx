@@ -29,9 +29,11 @@ function Page() {
   return (
     <>
       <Navbar />
-      <Testing />
-      <LandingPage />
-      <SinglePage />
+      <Connected>
+        <Testing />
+        <LandingPage />
+        <SinglePage />
+      </Connected>
       {/* <h1>wagmi + RainbowKit + Next.js</h1>
 
       <ConnectButton />
