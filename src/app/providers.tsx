@@ -19,11 +19,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <RainbowKitProvider
         coolMode
         theme={midnightTheme({
-          // accentColor: "#7b3fe4",
-          // accentColorForeground: "white",
-          // borderRadius: "small",
-          // fontStack: "system",
-          // overlayBlur: "small",
           accentColor: "#fafafa",
           accentColorForeground: "black",
           borderRadius: "large",

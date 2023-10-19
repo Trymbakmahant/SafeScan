@@ -24,15 +24,18 @@ import GraphTesting from "../testing/graphqlTwitter";
 import LandingPage from "../pages/LandingPage/page";
 import Navbar from "../pages/Navbar";
 import SinglePage from "../pages/SinglePage/page";
+import SearchPage from "../pages/SearchPage/page";
 
 function Page() {
   const inputref = useRef<HTMLInputElement | null>(null);
   return (
     <>
       <Navbar />
+
       <Connected>
         <LandingPage />
       </Connected>
+
       {/* <h1>wagmi + RainbowKit + Next.js</h1>
 
       <ConnectButton />
