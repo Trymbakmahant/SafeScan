@@ -20,6 +20,7 @@ import { WriteContract } from "../components/WriteContract";
 import { WriteContractPrepared } from "../components/WriteContractPrepared";
 import ButtonUsage from "../Home/page";
 import Testing from "../testing/apitesting";
+import GraphTesting from "../testing/graphqlTwitter";
 import LandingPage from "../pages/LandingPage/page";
 import Navbar from "../pages/Navbar";
 import SinglePage from "../pages/SinglePage/page";
@@ -30,9 +31,7 @@ function Page() {
     <>
       <Navbar />
       <Connected>
-        <Testing />
         <LandingPage />
-        <SinglePage />
       </Connected>
       {/* <h1>wagmi + RainbowKit + Next.js</h1>
 

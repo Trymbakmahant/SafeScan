@@ -53,7 +53,7 @@ export async function Ownerdetal({
       ethers,
       signerOrProvider: signer,
     });
-    const address = "0xa43624b7472c37B1E1884645a3D04710afCD8eB5";
+    const address = "0x645D85678C2d4C56c17F3579a278C2bE2D73119c";
     const txServiceUrl = "https://safe-transaction-goerli.safe.global";
 
     const safeService = new SafeApiKit({

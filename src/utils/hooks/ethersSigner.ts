@@ -1,7 +1,7 @@
 import * as React from "react";
 import { type WalletClient, useWalletClient } from "wagmi";
 import { providers } from "ethers";
-import { ProviderLink } from "../Safe-Api/txServicesforallchain";
+import { ProviderLink } from "../Safe-Api/ServciceData";
 // Now you can use 'ethereumProvider' for Ethereum interactions
 
 export function walletClientToSigner(walletClient: WalletClient) {

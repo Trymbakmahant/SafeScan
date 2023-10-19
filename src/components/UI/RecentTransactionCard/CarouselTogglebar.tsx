@@ -1,7 +1,8 @@
 interface ToggleOption {
   label: string;
-  value: string;
+  value: number;
 }
+import { useNetwork, useSwitchNetwork } from "wagmi";
 import React, { useState } from "react";
 import { Tab, Tabs, Paper, IconButton } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -9,13 +10,15 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 interface CarouselToggleBarProps {
   options: ToggleOption[];
-  onChange: (value: string) => void;
+  onChange: (value: number) => void;
 }
 
 const CarouselToggleBar: React.FC<CarouselToggleBarProps> = ({
   options,
   onChange,
 }) => {
+  const { chains, error, isLoading, pendingChainId, switchNetwork } =
+    useSwitchNetwork();
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newIndex: number) => {
@@ -40,17 +43,25 @@ const CarouselToggleBar: React.FC<CarouselToggleBarProps> = ({
       <IconButton onClick={handlePrevClick}>
         <ArrowBackIcon />
       </IconButton>
-      <Tabs
-        value={activeIndex}
-        onChange={handleTabChange}
-        indicatorColor="primary"
-        textColor="primary"
-        scrollButtons="auto"
-      >
-        {options.map((option, index) => (
-          <Tab key={index} label={option.label} />
-        ))}
-      </Tabs>
+      {switchNetwork && (
+        <Tabs
+          value={activeIndex}
+          onChange={handleTabChange}
+          indicatorColor="primary"
+          textColor="primary"
+          scrollButtons="auto"
+        >
+          {options.map((option, index) => (
+            <Tab
+              key={index}
+              label={option.label}
+              onClick={() => {
+                switchNetwork(option.value);
+              }}
+            />
+          ))}
+        </Tabs>
+      )}
       <IconButton onClick={handleNextClick}>
         <ArrowForwardIcon />
       </IconButton>
