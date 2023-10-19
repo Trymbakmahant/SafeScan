@@ -23,17 +23,21 @@ import Testing from "../testing/apitesting";
 import LandingPage from "../pages/LandingPage/page";
 import Navbar from "../pages/Navbar";
 import SinglePage from "../pages/SinglePage/page";
+import SearchPage from "../pages/SearchPage/page";
 
 function Page() {
   const inputref = useRef<HTMLInputElement | null>(null);
   return (
     <>
       <Navbar />
+
       <Connected>
-        <Testing />
+        {/* <Testing />
         <LandingPage />
-        <SinglePage />
+        <SinglePage /> */}
+        <SearchPage />
       </Connected>
+
       {/* <h1>wagmi + RainbowKit + Next.js</h1>
 
       <ConnectButton />
