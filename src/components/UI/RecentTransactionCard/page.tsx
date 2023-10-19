@@ -24,8 +24,7 @@ export default function PinnedSubheaderList() {
     { label: "Option 12", value: "option12" },
     { label: "Option 13", value: "option13" },
     { label: "Option 14", value: "option14" },
-    { label: "Option 15", value: "option15" },
-    { label: "Option 16", value: "option16" },
+  
   ];
   const [alignment, setAlignment] = React.useState("web");
   const [page, setPage] = React.useState(0);
