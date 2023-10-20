@@ -17,6 +17,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
+import Testing from "./Testing/Testing";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -191,6 +192,10 @@ function Navbar() {
                   />
                 </Search>
               </Box>
+            </Box>
+
+            <Box>
+              <Testing />
             </Box>
 
             <Box>
