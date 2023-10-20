@@ -167,8 +167,55 @@
 
 ///////////////////////////// safe transaction detail ////////////////////////////////
 
+// import React from "react";
+// import { getDataWithTransactionHash } from "../utils/Safe-Api/safeApp";
+// import { useWalletClient, useAccount } from "wagmi";
+// import { useEthersSigner } from "../utils/hooks/ethersSigner";
+// import { txServiceList } from "../utils/Safe-Api/ServciceData";
+// import { fetchTransaction } from "@wagmi/core";
+
+// const apitesting = () => {
+//   const { data: walletClient, isError, isLoading } = useWalletClient();
+//   const signer: any = useEthersSigner();
+//   const { address } = useAccount();
+
+//   async function hello() {
+//     const safeTxHash =
+//       "0x596104426ff8fd56e0488099cfe1829b45aaab323af1ef9cf8d610cae7af57ac";
+//     const safeAddress = "0xa43624b7472c37B1E1884645a3D04710afCD8eB5";
+//     try {
+//       const transaction = await fetchTransaction({
+//         hash: "0x596104426ff8fd56e0488099cfe1829b45aaab323af1ef9cf8d610cae7af57ac",
+//       });
+//       // const ans = await getDataWithTransactionHash(
+//       //   signer,
+//       //   txServiceList.Goerli,
+//       //   safeTxHash
+//       // );
+//       console.log(transaction);
+//     } catch (e) {
+//       console.log(e);
+//     }
+//   }
+
+//   return (
+//     <div>
+//       <button
+//         onClick={() => {
+//           hello();
+//         }}
+//       >
+//         Testings{" "}
+//       </button>
+//     </div>
+//   );
+// };
+
+// export default apitesting;
+
+/////////////////////////// All transaction  testing //////////////////////////
 import React from "react";
-import { getDataWithTransactionHash } from "../utils/Safe-Api/safeApp";
+import { AllTransactionList } from "../utils/Safe-Api/safeApp";
 import { useWalletClient, useAccount } from "wagmi";
 import { useEthersSigner } from "../utils/hooks/ethersSigner";
 import { txServiceList } from "../utils/Safe-Api/ServciceData";
@@ -184,15 +231,12 @@ const apitesting = () => {
       "0x596104426ff8fd56e0488099cfe1829b45aaab323af1ef9cf8d610cae7af57ac";
     const safeAddress = "0xa43624b7472c37B1E1884645a3D04710afCD8eB5";
     try {
-      const transaction = await fetchTransaction({
-        hash: "0x596104426ff8fd56e0488099cfe1829b45aaab323af1ef9cf8d610cae7af57ac",
-      });
-      // const ans = await getDataWithTransactionHash(
-      //   signer,
-      //   txServiceList.Goerli,
-      //   safeTxHash
-      // );
-      console.log(transaction);
+      const ans = await AllTransactionList(
+        signer,
+        txServiceList.Goerli,
+        safeAddress
+      );
+      console.log(ans);
     } catch (e) {
       console.log(e);
     }
