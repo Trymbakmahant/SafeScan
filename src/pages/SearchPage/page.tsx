@@ -1,12 +1,17 @@
 "use client";
 
-import { Grid, Card, Typography, Box } from "@mui/material";
+import { Grid, Card, Typography, Box, Button } from "@mui/material";
 import List from "../../components/UI/RecentTransactionCard/page";
 import Image from "next/image";
 import styles from "./page.module.scss";
 import { useState } from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import IconButton from "@mui/material/IconButton";
+import * as React from "react";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 const SearchPage = () => {
   const [addres, setaddres] = useState<string>(
@@ -19,6 +24,14 @@ const SearchPage = () => {
     setCopy(true);
     alert(`"copied" ${addres} `);
   };
+
+  //set token
+  const [Token, setToken] = React.useState("");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setToken(event.target.value);
+  };
+
   return (
     <>
       <Grid className={styles.main}>
@@ -27,7 +40,7 @@ const SearchPage = () => {
             <Box sx={{ display: "flex", flexDirection: "row" }}>
               <Box sx={{ padding: "20px" }}>
                 {/* <Image width={25} height={25} alt="" src="/orig1.png" /> */}
-                <img src="/orig.png" />
+                <img src="/orig1.png" />
               </Box>
               <Typography>
                 {" "}
@@ -82,10 +95,27 @@ const SearchPage = () => {
                 <Typography sx={{ fontSize: "14px", color: "#707070	" }}>
                   TOKEN HOLDINGS
                 </Typography>
-                <Typography sx={{ fontSize: "14px" }}>
+                {/* <Typography sx={{ fontSize: "14px" }}>
                   {" "}
                   $9.83<span>(1 Tokens)</span>
-                </Typography>
+                </Typography> */}
+                <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                  <InputLabel id="demo-select-small-label">Token</InputLabel>
+                  <Select
+                    labelId="demo-select-small-label"
+                    id="demo-select-small"
+                    value={Token}
+                    label="Token"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                </FormControl>
               </div>
             </Card>
           </Grid>
@@ -137,20 +167,24 @@ const SearchPage = () => {
           </Grid>
           <Grid className={styles.card}>
             <Card sx={{ padding: "20px", height: "15rem", gap: "12px" }}>
-              <Typography sx={{ fontSize: "20px" }}>Multichain</Typography>
+              <Typography sx={{ fontSize: "20px" }}>Nft's</Typography>
               <div
                 style={{
                   marginTop: "20px",
                 }}
               >
                 <Typography sx={{ fontSize: "14px", color: "#707070	" }}>
-                  MULTICHAIN ADDRESSES
+                  :
                 </Typography>
                 <Typography my={0.5} sx={{ fontSize: "14px" }}>
                   {" "}
-                  17 addresses found via bLOCKSCANE
+                  17 Nft's found via bLOCKSCANE
                 </Typography>
               </div>
+
+              <Box my={4}>
+                <Button variant="contained">View Your Nft's</Button>
+              </Box>
             </Card>
           </Grid>
         </Grid>
