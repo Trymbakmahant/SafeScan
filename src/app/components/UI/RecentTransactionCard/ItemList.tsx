@@ -43,7 +43,7 @@ const ItemList: React.FC<ItemListProps> = ({ items }) => {
                 <TableCell>{item.sender}</TableCell>
                 <TableCell>{item.amount}</TableCell>
                 <TableCell>
-                  <Link href={`/item/${item.id}`} passHref>
+                  <Link href={`/pages/${item.id}`} passHref>
                     <Button variant="contained" color="primary" component="a">
                       View Details
                     </Button>

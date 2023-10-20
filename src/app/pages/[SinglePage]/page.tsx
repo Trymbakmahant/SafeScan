@@ -11,7 +11,10 @@ import TableRow from "@mui/material/TableRow";
 
 import styles from "./page.module.scss";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-const SinglePage = () => {
+import { useRouter } from "next/router";
+const SinglePageDetail = ({ params }: { params: { SinglePage: string } }) => {
+  const data = params.SinglePage;
+  console.log(data);
   function createData(name: string, calories: string, toolpick: string) {
     return { name, calories, toolpick };
   }
@@ -222,4 +225,4 @@ const SinglePage = () => {
   );
 };
 
-export default SinglePage;
+export default SinglePageDetail;
