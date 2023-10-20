@@ -10,13 +10,30 @@ import {
   SafeCreationInfoResponse,
   TokenInfoListResponse,
   TransferListResponse,
+  AllTransactionsListResponse,
   SafeMultisigTransactionListResponse,
   SafeModuleTransactionListResponse,
   SafeInfoResponse,
 } from "@safe-global/api-kit";
+import { SafeMultisigTransactionResponse } from "@safe-global/safe-core-sdk-types";
+import { txServiceList } from "./ServciceData";
 
-export async function getServiceInfo({ safeService }: { safeService: any }) {
+//Returns the information and configuration of the service.
+export async function getServiceInfo(
+  address: any,
+  signer: providers.JsonRpcSigner,
+  txServiceUrl: string
+) {
   try {
+    const ethAdapterOwner1 = new EthersAdapter({
+      ethers,
+      signerOrProvider: signer,
+    });
+
+    const safeService = new SafeApiKit({
+      txServiceUrl,
+      ethAdapter: ethAdapterOwner1,
+    });
     const serviceInfo: SafeServiceInfoResponse =
       await safeService.getServiceInfo();
     console.log(serviceInfo);
@@ -27,14 +44,21 @@ export async function getServiceInfo({ safeService }: { safeService: any }) {
 }
 
 /// this help to find safe account of the address
-export async function getSafesByOwner({
-  address,
-  safeService,
-}: {
-  address: `0x${string}` | undefined;
-  safeService: any;
-}) {
+export async function getSafesByOwner(
+  address: any,
+  signer: providers.JsonRpcSigner,
+  txServiceUrl: string
+) {
   try {
+    const ethAdapterOwner1 = new EthersAdapter({
+      ethers,
+      signerOrProvider: signer,
+    });
+
+    const safeService = new SafeApiKit({
+      txServiceUrl,
+      ethAdapter: ethAdapterOwner1,
+    });
     console.log(safeService);
     const safes: OwnerResponse = await safeService.getSafesByOwner(address);
     return safes;
@@ -43,53 +67,96 @@ export async function getSafesByOwner({
   }
 }
 
-export async function Ownerdetal({
-  signer,
-}: {
-  signer: providers.JsonRpcSigner;
-}) {
+// export async function Ownerdetal({
+//   signer,
+// }: {
+//   signer: providers.JsonRpcSigner;
+// }) {
+//   try {
+//     const ethAdapterOwner1 = new EthersAdapter({
+//       ethers,
+//       signerOrProvider: signer,
+//     });
+//     const address = "0x645D85678C2d4C56c17F3579a278C2bE2D73119c";
+//     const txServiceUrl = "https://safe-transaction-goerli.safe.global";
+
+//     const safeService = new SafeApiKit({
+//       txServiceUrl,
+//       ethAdapter: ethAdapterOwner1,
+//     });
+
+//     const serviceInfo: OwnerResponse = await safeService.getSafesByOwner(
+//       address
+//     );
+//     console.log(serviceInfo);
+//     return serviceInfo;
+//   } catch (e) {
+//     console.log(e);
+//   }
+// }
+
+// return the data of multisig transaction by transaction hash
+export async function getMultisigTransaction(
+  safeTxHash: any,
+  signer: providers.JsonRpcSigner,
+  txServiceUrl: string
+) {
+  const ethAdapterOwner1 = new EthersAdapter({
+    ethers,
+    signerOrProvider: signer,
+  });
+
+  const safeService = new SafeApiKit({
+    txServiceUrl,
+    ethAdapter: ethAdapterOwner1,
+  });
+  const tx: SafeMultisigTransactionResponse = await safeService.getTransaction(
+    safeTxHash
+  );
+  return tx;
+}
+
+// return the transaction detail by taking parameter  of safe service and transaction hash as safetxhash
+export async function getDataWithTransactionHash(
+  signer: providers.JsonRpcSigner,
+  txServiceUrl: string,
+  safeTxHash: string
+) {
   try {
     const ethAdapterOwner1 = new EthersAdapter({
       ethers,
       signerOrProvider: signer,
     });
-    const address = "0x645D85678C2d4C56c17F3579a278C2bE2D73119c";
-    const txServiceUrl = "https://safe-transaction-goerli.safe.global";
 
     const safeService = new SafeApiKit({
       txServiceUrl,
       ethAdapter: ethAdapterOwner1,
     });
-
-    const serviceInfo: OwnerResponse = await safeService.getSafesByOwner(
-      address
-    );
-    console.log(serviceInfo);
-    return serviceInfo;
+    const tx: SafeMultisigTransactionResponse =
+      await safeService.getTransaction(safeTxHash);
+    console.log(tx);
+    return tx;
   } catch (e) {
     console.log(e);
   }
 }
-export async function getMultisigTransaction({
-  safeService,
-  safeTxHash,
-}: {
-  safeService: any;
-  safeTxHash: any;
-}) {
-  const tx: SafeMultisigTransactionEstimateResponse =
-    await safeService.getTransaction(safeTxHash);
-  return tx;
-}
 
-export async function getSafeInfo({
-  safeService,
-  address,
-}: {
-  safeService: any;
-  address: any;
-}) {
+// return all the information about the safe
+export async function getSafeInfo(
+  signer: providers.JsonRpcSigner,
+  txServiceUrl: string,
+  address: string
+) {
   try {
+    const ethAdapterOwner1 = new EthersAdapter({
+      ethers,
+      signerOrProvider: signer,
+    });
+
+    const safeService = new SafeApiKit({
+      txServiceUrl,
+      ethAdapter: ethAdapterOwner1,
+    });
     console.log("hello");
     const safeInfo: SafeInfoResponse = await safeService.getSafeInfo(address);
     console.log(safeInfo);
@@ -98,93 +165,167 @@ export async function getSafeInfo({
     console.log(e);
   }
 }
-export async function getSafeCreationInfo({
-  safeService,
-  address,
-}: {
-  safeService: any;
-  address: string;
-}) {
+
+// return the information of safe creation
+export async function getSafeCreationInfo(
+  signer: providers.JsonRpcSigner,
+  txServiceUrl: string,
+  address: string
+) {
+  const ethAdapterOwner1 = new EthersAdapter({
+    ethers,
+    signerOrProvider: signer,
+  });
+
+  const safeService = new SafeApiKit({
+    txServiceUrl,
+    ethAdapter: ethAdapterOwner1,
+  });
   const safeCreationInfo: SafeCreationInfoResponse =
     await safeService.getSafeCreationInfo(address);
   return safeCreationInfo;
 }
-export async function SafeTransactionsHistory({
-  safeService,
-  address,
-}: {
-  safeService: any;
-  address: string;
-}) {
+
+// return the safe transaction history
+export async function SafeTransactionsHistory(
+  signer: providers.JsonRpcSigner,
+  txServiceUrl: string,
+  address: string
+) {
+  const ethAdapterOwner1 = new EthersAdapter({
+    ethers,
+    signerOrProvider: signer,
+  });
+
+  const safeService = new SafeApiKit({
+    txServiceUrl,
+    ethAdapter: ethAdapterOwner1,
+  });
   const incomingTxs: TransferListResponse =
     await safeService.getIncomingTransactions(address);
 
   return incomingTxs;
 }
-export async function ModuleTransactionsHistory({
-  safeService,
-  address,
-}: {
-  safeService: any;
-  address: string;
-}) {
+
+// return the transaction history by any module
+export async function ModuleTransactionsHistory(
+  signer: providers.JsonRpcSigner,
+  txServiceUrl: string,
+  address: string
+) {
+  const ethAdapterOwner1 = new EthersAdapter({
+    ethers,
+    signerOrProvider: signer,
+  });
+
+  const safeService = new SafeApiKit({
+    txServiceUrl,
+    ethAdapter: ethAdapterOwner1,
+  });
   const moduleTxs: SafeModuleTransactionListResponse =
     await safeService.getModuleTransactions(address);
 
   return moduleTxs;
 }
 
-export async function MultisigTransactionsHistory({
-  safeService,
-  address,
-}: {
-  safeService: any;
-  address: string;
-}) {
+// return the transaction history of a safe with multiple owner
+export async function MultisigTransactionsHistory(
+  signer: providers.JsonRpcSigner,
+  txServiceUrl: string,
+  address: string
+) {
+  const ethAdapterOwner1 = new EthersAdapter({
+    ethers,
+    signerOrProvider: signer,
+  });
+
+  const safeService = new SafeApiKit({
+    txServiceUrl,
+    ethAdapter: ethAdapterOwner1,
+  });
   const multisigTxs: SafeMultisigTransactionListResponse =
     await safeService.getMultisigTransactions(address);
 
   return multisigTxs;
 }
-export async function PendingTransactionsList({
-  safeService,
-  address,
-}: {
-  safeService: any;
-  address: string;
-}) {
+
+// return all the pending transaction  of safe with multiple owner
+export async function MultiSigPendingTransactionsList(
+  signer: providers.JsonRpcSigner,
+  txServiceUrl: string,
+  address: string
+) {
+  const ethAdapterOwner1 = new EthersAdapter({
+    ethers,
+    signerOrProvider: signer,
+  });
+
+  const safeService = new SafeApiKit({
+    txServiceUrl,
+    ethAdapter: ethAdapterOwner1,
+  });
   const pendingTxs: SafeMultisigTransactionListResponse =
     await safeService.getPendingTransactions(address);
 
   return pendingTxs;
 }
-export async function AllTransactionList({
-  safeService,
-  address,
-}: {
-  safeService: any;
-  address: string;
-}) {
-  const allTxs: SafeMultisigTransactionListResponse =
+
+/// return all the transaction list of a  particular safe
+export async function AllTransactionList(
+  signer: providers.JsonRpcSigner,
+  txServiceUrl: string,
+  address: string
+) {
+  const ethAdapterOwner1 = new EthersAdapter({
+    ethers,
+    signerOrProvider: signer,
+  });
+
+  const safeService = new SafeApiKit({
+    txServiceUrl,
+    ethAdapter: ethAdapterOwner1,
+  });
+  const allTxs: AllTransactionsListResponse =
     await safeService.getAllTransactions(address);
   return allTxs;
 }
 
-export async function PendingTransactionsListWithCurrentNonce({
-  safeService,
-  address,
-  currentNonce,
-}: {
-  safeService: any;
-  address: string;
-  currentNonce: string;
-}) {
+// its return pending transaction list by taking safe address and nonce
+export async function PendingTransactionsListWithCurrentNonce(
+  signer: providers.JsonRpcSigner,
+  txServiceUrl: string,
+  address: string,
+  currentNonce: any
+) {
+  const ethAdapterOwner1 = new EthersAdapter({
+    ethers,
+    signerOrProvider: signer,
+  });
+
+  const safeService = new SafeApiKit({
+    txServiceUrl,
+    ethAdapter: ethAdapterOwner1,
+  });
   const pendingTxs: SafeMultisigTransactionListResponse =
     await safeService.getPendingTransactions(address, currentNonce);
   return pendingTxs;
 }
 
-export async function AllTokenForSafe({ safeService }: { safeService: any }) {
+// return the info about the safe  with all info
+
+export async function AllTokenForSafe(
+  signer: providers.JsonRpcSigner,
+  txServiceUrl: string
+) {
+  const ethAdapterOwner1 = new EthersAdapter({
+    ethers,
+    signerOrProvider: signer,
+  });
+
+  const safeService = new SafeApiKit({
+    txServiceUrl,
+    ethAdapter: ethAdapterOwner1,
+  });
   const tokens: TokenInfoListResponse = await safeService.getTokenList();
   return tokens;
 }
