@@ -19,20 +19,30 @@ import { WatchPendingTransactions } from "./components/WatchPendingTransactions"
 import { WriteContract } from "./components/WriteContract";
 import { WriteContractPrepared } from "./components/WriteContractPrepared";
 import ButtonUsage from "./Home/page";
+import Link from "next/link";
 import Testing from "../testing/apitesting";
 import GraphTesting from "../testing/graphqlTwitter";
 import LandingPage from "./pages/LandingPage/page";
 import Navbar from "./pages/Navbar";
-import SinglePage from "./pages/[SinglePage]/page";
+import Tx from "./TransactionDetail/[tx]";
+import SinglePage from "./pages/SinglePage/page";
 import SearchPage from "./pages/SearchPage/page";
 
 function Page() {
   const inputref = useRef<HTMLInputElement | null>(null);
+  const txurl = "./pages/TransactionDetail/[tx]";
   return (
     <>
+      <Link
+        href="/TransactionDetail/[tx]"
+        as="/TransactionDetail/your-transaction-id"
+      >
+        hello
+      </Link>
       <Navbar />
 
       <Connected>
+        <Testing />
         <LandingPage />
       </Connected>
 

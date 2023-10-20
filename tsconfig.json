@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2022",
+    "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -9,6 +9,7 @@
     "noEmit": true,
     "esModuleInterop": true,
     "types": ["node"],
+
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
