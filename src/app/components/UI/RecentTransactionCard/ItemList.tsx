@@ -61,6 +61,7 @@ const ItemList: React.FC<ItemListProps> = ({ items }) => {
               <TableRow key={item.blockNumber}>
                 <TableCell>{item.hash}</TableCell>
                 <TableCell>{item.functionName}</TableCell>
+                <TableCell>{item.blockNumber}</TableCell>
                 <TableCell>{item.timeStamp}</TableCell>
                 <TableCell>{item.from}</TableCell>
                 <TableCell>{item.to}</TableCell>
