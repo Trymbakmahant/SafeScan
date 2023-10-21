@@ -50,8 +50,17 @@ const items = [
   { id: 2, receiver: "Alice", sender: "Bob", amount: "40" },
 ];
 
+interface ToggleOption {
+  label: string;
+  value: number;
+  SafeTxService: string;
+  ProviderLink: string;
+  ScanLink: string;
+  // ApiKey: string;
+}
 interface ItemsProps {
   chain: string;
+  options: ToggleOption[];
 }
 
 const ItemsPage: React.FC<ItemsProps> = ({ chain }) => {
