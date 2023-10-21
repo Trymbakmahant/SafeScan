@@ -17,7 +17,9 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import SearchIcon from "@mui/icons-material/Search";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
-
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
@@ -28,6 +30,11 @@ function Navbar() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+  const [address, setAdress] = React.useState("ADdress");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setAdress(event.target.value as string);
+  };
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -176,20 +183,41 @@ function Navbar() {
                   {page}
                 </Button>
               ))} */}
-              <Box>
+              <Box mt={1}>
                 <Search
                   sx={{
                     minWidth: "250px",
                   }}
                 >
-                  <SearchIconWrapper>
-                    <SearchIcon />
-                  </SearchIconWrapper>
                   <StyledInputBase
                     placeholder="Search by address, ENS or Token symbol"
                     inputProps={{ "aria-label": "search" }}
                   />
                 </Search>
+              </Box>
+              <Box marginRight={4}>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+              </Box>
+              <Box mx={4} sx={{ m: 2, minWidth: 120 }}>
+                <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                  <InputLabel id="demo-select-small-label">Select</InputLabel>
+                  <Select
+                    labelId="demo-select-small-label"
+                    id="demo-select-small"
+                    value={address}
+                    label="Age"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={10}>Address</MenuItem>
+                    <MenuItem value={20}>TxHash</MenuItem>
+                    <MenuItem value={30}>ENS</MenuItem>
+                  </Select>
+                </FormControl>
               </Box>
             </Box>
 

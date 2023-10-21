@@ -1,6 +1,6 @@
 "use client";
 
-import { Grid, Card, Typography, Box } from "@mui/material";
+import { Grid, Card, Typography, Box, Button } from "@mui/material";
 import List from "../../components/UI/RecentTransactionCard/page";
 import Image from "next/image";
 import styles from "./page.module.scss";
@@ -137,20 +137,24 @@ const SearchPage = () => {
           </Grid>
           <Grid className={styles.card}>
             <Card sx={{ padding: "20px", height: "15rem", gap: "12px" }}>
-              <Typography sx={{ fontSize: "20px" }}>Multichain</Typography>
+              <Typography sx={{ fontSize: "20px" }}>Nft's</Typography>
               <div
                 style={{
                   marginTop: "20px",
                 }}
               >
                 <Typography sx={{ fontSize: "14px", color: "#707070	" }}>
-                  MULTICHAIN ADDRESSES
+                  :
                 </Typography>
                 <Typography my={0.5} sx={{ fontSize: "14px" }}>
                   {" "}
-                  17 addresses found via bLOCKSCANE
+                  17 Nft's found via bLOCKSCANE
                 </Typography>
               </div>
+
+              <Box my={4}>
+                <Button variant="contained">View Your Nft's</Button>
+              </Box>
             </Card>
           </Grid>
         </Grid>

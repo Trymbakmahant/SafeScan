@@ -19,7 +19,7 @@ const SinglePageDetail = ({ params }: { params: { SinglePage: string } }) => {
     return { name, calories, toolpick };
   }
 
-  const rows = [
+  const rows2 = [
     createData(
       "transection Hash",
       " 0xa9f26007f3880c6d5da031f9817ae920db3cdb9c55f34034efd8b3e64eaa0736",
@@ -32,8 +32,6 @@ const SinglePageDetail = ({ params }: { params: { SinglePage: string } }) => {
       " 23 secs ago (Oct-16-2023 05:54:35 PM +UTC)",
       "The date and time at which a transaction is validated."
     ),
-  ];
-  const rows2 = [
     createData(
       "From:",
       " 0xb652158f67b9fb39c29412d6f8e1c563ff6724f2",
@@ -90,134 +88,67 @@ const SinglePageDetail = ({ params }: { params: { SinglePage: string } }) => {
 
         <Grid container className={styles.maindatacard}>
           <Grid xs={12}>
-            <Card
-              className={styles.datacard}
-              sx={{
-                border: "0 solid ",
-                borderRadius: "8px",
-              }}
-            >
-              <TableContainer component={Paper}>
-                <Table
-                  sx={{
-                    minWidth: 650,
-                    "& .MuiTableCell-root": {
-                      border: 0,
-                    },
-                  }}
-                  aria-label="simple table"
-                >
-                  <TableHead>
-                    <TableRow
-                      sx={{
-                        border: 0,
-                      }}
-                    >
-                      <TableCell
-                        sx={{
-                          fontSize: "30px",
-                          "&:last-child td, &:last-child th": { border: 0 },
-                          border: 0,
-                        }}
-                      >
-                        Overview
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map((row) => (
-                      <TableRow
-                        key={row.name}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                          border: 0,
-                        }}
-                      >
-                        <TableCell
-                          component="th"
-                          scope="row"
+            <Box>
+              <Card
+                className={styles.datacard}
+                sx={{
+                  borderRadius: "12px",
+                  padding: "50px",
+                }}
+              >
+                <TableContainer component={Paper}>
+                  <Table
+                    sx={{
+                      minWidth: 650,
+                      // "& .MuiTableCell-root": {
+                      //   border: " solid white 1px",
+                      // },
+                    }}
+                    aria-label="simple table"
+                    size="small"
+                  >
+                    <TableBody>
+                      {rows2.map((row) => (
+                        <TableRow
+                          key={row.name}
                           sx={{
-                            width: "300px",
-                            fontSize: "20px",
+                            // "&:last-child td, &:last-child th": { border: 0 },
+                            border: 0,
                           }}
                         >
-                          <Tooltip
-                            title={<Typography>{row.toolpick}</Typography>}
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            sx={{
+                              width: "300px",
+                              fontSize: "20px",
+                            }}
                           >
-                            <IconButton>
-                              <HelpOutlineIcon />
-                            </IconButton>
-                          </Tooltip>
-                          {row.name}
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            width: "600px",
-                            fontSize: "16px",
-                            color: "	#888888",
-                          }}
-                        >
-                          {row.calories}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <Divider />
-              <Box sx={{ height: "150px" }}></Box>
-              <Divider />
-              <TableContainer component={Paper}>
-                <Table
-                  sx={{
-                    minWidth: 650,
-                    "& .MuiTableCell-root": {
-                      border: 0,
-                    },
-                  }}
-                  aria-label="simple table"
-                >
-                  <TableBody>
-                    {rows2.map((row) => (
-                      <TableRow
-                        key={row.name}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                          border: 0,
-                        }}
-                      >
-                        <TableCell
-                          component="th"
-                          scope="row"
-                          sx={{
-                            width: "300px",
-                            fontSize: "20px",
-                          }}
-                        >
-                          <Tooltip
-                            title={<Typography>{row.toolpick}</Typography>}
+                            <Tooltip
+                              title={<Typography>{row.toolpick}</Typography>}
+                            >
+                              <IconButton>
+                                <HelpOutlineIcon />
+                              </IconButton>
+                            </Tooltip>
+                            {row.name}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              width: "600px",
+                              fontSize: "16px",
+                              color: "	#888888",
+                            }}
                           >
-                            <IconButton>
-                              <HelpOutlineIcon />
-                            </IconButton>
-                          </Tooltip>
-                          {row.name}
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            width: "600px",
-                            fontSize: "16px",
-                            color: "	#888888",
-                          }}
-                        >
-                          {row.calories}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Card>
+                            {row.calories}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Card>
+            </Box>
           </Grid>
         </Grid>
       </Box>
