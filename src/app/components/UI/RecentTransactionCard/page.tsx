@@ -1,7 +1,8 @@
+"use client";
 import * as React from "react";
 import Card from "@mui/material/Card";
-import ItemList from "./ItemList";
 import axios from "axios";
+import Link from "next/link";
 import { options } from "../../../constant/AllServiceOption";
 import {
   Tab,
@@ -11,37 +12,49 @@ import {
   Container,
   Typography,
   TablePagination,
+  Table,
+  TableContainer,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Button,
+  Box,
 } from "@mui/material";
 import { Connected } from "../../wagmiCode/Connected";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-interface ToggleOption {
-  label: string;
-  value: number;
-  SafeTxService: string;
-  ProviderLink: string;
-  ScanLink: string;
-  // ApiKey: string;
+
+interface Item {
+  blockHash: "0xa54e2e48552c7428c6f7b5b748a78d452a3bd23a227e4c992c634d315816d8e5";
+  blockNumber: "18399277";
+  confirmations: "20";
+  contractAddress: "";
+  cumulativeGasUsed: "6659184";
+  from: "0x9d0870e65416c0727cf733704069d9fea5a66be4";
+  functionName: "createProxyWithNonce(address _mastercopy, bytes initializer, uint256 saltNonce)";
+  gas: "261619";
+  gasPrice: "10999913628";
+  gasUsed: "258640";
+  hash: "0xe2cbcb881abb5825f24f97f84439b1cb7acd191b705a0ebdcee3c31309d2747a";
+  input: "0x1688f0b9000000000000000000000000d9db270c1b5e3bd161e8c8503c55ceabee70955200000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000018b52a241b00000000000000000000000000000000000000000000000000000000000000164b63e800d0000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000140000000000000000000000000f48f2b2d2a534e402487b3ee7c18c33aec0fe5e400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000009d0870e65416c0727cf733704069d9fea5a66be4000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+  isError: "0";
+  methodId: "0x1688f0b9";
+  nonce: "9";
+  timeStamp: "1697898467";
+  to: "0xa6b71e26c5e0845f74c812102ca7114b6a896ab2";
+  transactionIndex: "67";
+  txreceipt_status: "1";
+  value: "0";
 }
 export default function PinnedSubheaderList() {
   const [page, setPage] = React.useState(0);
   const [flag, setFlag] = React.useState(false);
-  const [itemsToShow, setItemsToShow] = React.useState([]);
-  const [items, setItems] = React.useState([]);
+  const [itemsToShow, setItemsToShow] = React.useState<Item[]>([]);
+  const [items, setItems] = React.useState<Item[]>([]);
   const [apiurl, setApiUrl] = React.useState(options[0].ScanLink);
   const [apiKey, SetApiKey] = React.useState(options[0].ApiKey);
-  const rowsPerPage = 3;
-
-  const handleChangePage = (event: any, newPage: number) => {
-    setPage(newPage); // Ensure this updates the page state correctly.
-  };
-
-  const [selectedOption, setSelectedOption] = React.useState(options[0].value);
-  const [currentPage, setCurrentPage] = React.useState(1);
-
-  const handleOptionChange = (value: number) => {
-    setSelectedOption(value);
-  };
+  const rowsPerPage = 10;
 
   const [activeIndex, setActiveIndex] = React.useState(0);
 
@@ -49,7 +62,7 @@ export default function PinnedSubheaderList() {
     setActiveIndex(newIndex);
     setItems([]);
     setItemsToShow([]);
-    handleOptionChange(options[newIndex].value);
+
     setApiUrl(options[newIndex].ScanLink);
     SetApiKey(options[newIndex].ApiKey);
     setPage(0);
@@ -58,19 +71,21 @@ export default function PinnedSubheaderList() {
   const handlePrevClick = () => {
     const newIndex = Math.max(0, activeIndex - 10);
     setActiveIndex(newIndex);
-    handleOptionChange(options[newIndex].value);
   };
 
   const handleNextClick = () => {
     const newIndex = Math.min(options.length - 1, activeIndex + 10);
     setActiveIndex(newIndex);
-    handleOptionChange(options[newIndex].value);
   };
 
   const handlePageChange = (event: any, newPage: number) => {
-    setCurrentPage(newPage);
     setPage(newPage);
-    setItemsToShow(items.slice(page * rowsPerPage, (page + 1) * rowsPerPage));
+    console.log("newPage " + newPage);
+    console.log(itemsToShow);
+    setItemsToShow(
+      items.slice(page * rowsPerPage, (page + 1) * rowsPerPage)
+      // 0,3,  2,6 ,
+    );
   };
 
   async function DataApi() {
@@ -139,8 +154,8 @@ export default function PinnedSubheaderList() {
                 <ArrowForwardIcon />
               </IconButton>
             </Paper>
+            <CustomTableBody items={itemsToShow} page={page} />
             <Container>
-              <ItemList items={itemsToShow} />
               <TablePagination
                 component="div"
                 count={items.length} // Ensure this represents the total number of items.
@@ -156,3 +171,56 @@ export default function PinnedSubheaderList() {
     </>
   );
 }
+
+interface CustomBody {
+  items: Item[];
+  page: number;
+}
+
+const CustomTableBody: React.FC<CustomBody> = ({ items, page }) => {
+  React.useEffect(() => {
+    console.log(1);
+    console.log(items);
+  }, [page]);
+  return (
+    <Box display="flex" flexDirection="column" alignItems="center">
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Transaction Hash</TableCell>
+              <TableCell>Method</TableCell>
+              <TableCell>Block</TableCell>
+              <TableCell>Age</TableCell>
+              <TableCell>From</TableCell>
+              <TableCell>To</TableCell>
+              <TableCell>Value</TableCell>
+              <TableCell>Txn Fee</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {items.map((item) => (
+              <TableRow key={item.blockNumber}>
+                <TableCell>{item.hash}</TableCell>
+                <TableCell>{item.functionName}</TableCell>
+                <TableCell>{item.blockNumber}</TableCell>
+                <TableCell>{item.timeStamp}</TableCell>
+                <TableCell>{item.from}</TableCell>
+                <TableCell>{item.to}</TableCell>
+                <TableCell>{item.value}</TableCell>
+                <TableCell>{item.gas}</TableCell>
+                <TableCell>
+                  <Link href={`/pages/${item.hash}`} passHref>
+                    <Button variant="contained" color="primary" component="a">
+                      View Details
+                    </Button>
+                  </Link>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
+  );
+};
