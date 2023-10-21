@@ -28,7 +28,9 @@ export default function PinnedSubheaderList() {
   const [flag, setFlag] = React.useState(false);
   const [itemsToShow, setItemsToShow] = React.useState([]);
   const [items, setItems] = React.useState([]);
-  const rowsPerPage = 10;
+  const [apiurl, setApiUrl] = React.useState(options[0].ScanLink);
+  const [apiKey, SetApiKey] = React.useState(options[0].ApiKey);
+  const rowsPerPage = 3;
 
   const handleChangePage = (event: any, newPage: number) => {
     setPage(newPage); // Ensure this updates the page state correctly.
@@ -36,7 +38,7 @@ export default function PinnedSubheaderList() {
 
   const [selectedOption, setSelectedOption] = React.useState(options[0].value);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const totalPages = 13;
+
   const handleOptionChange = (value: number) => {
     setSelectedOption(value);
   };
@@ -45,7 +47,12 @@ export default function PinnedSubheaderList() {
 
   const handleTabChange = (event: React.ChangeEvent<{}>, newIndex: number) => {
     setActiveIndex(newIndex);
+    setItems([]);
+    setItemsToShow([]);
     handleOptionChange(options[newIndex].value);
+    setApiUrl(options[newIndex].ScanLink);
+    SetApiKey(options[newIndex].ApiKey);
+    setPage(0);
   };
 
   const handlePrevClick = () => {
@@ -60,27 +67,20 @@ export default function PinnedSubheaderList() {
     handleOptionChange(options[newIndex].value);
   };
 
-  const handlePageChange = (newPage: number) => {
+  const handlePageChange = (event: any, newPage: number) => {
     setCurrentPage(newPage);
+    setPage(newPage);
     setItemsToShow(items.slice(page * rowsPerPage, (page + 1) * rowsPerPage));
   };
 
   async function DataApi() {
-    const safeTxHash =
-      "0x596104426ff8fd56e0488099cfe1829b45aaab323af1ef9cf8d610cae7af57ac";
-    const safeAddress = "0xa43624b7472c37B1E1884645a3D04710afCD8eB5";
-
-    const apiKey = "26TJW7XYJ3UUYQ7T9E3PV4TDZR748TR84V";
     const address = "0xa6B71E26C5e0845f74c812102Ca7114b6a896AB2";
-
-    const apiUrl = "https://api.etherscan.io/api";
     const action = "txlist"; // For normal transactions
     const module = "account";
     const startBlock = "0"; // Start from block 0
     const endBlock = "latest"; // Up to the latest block
-
     axios
-      .get(apiUrl, {
+      .get(apiurl, {
         params: {
           module,
           action,
@@ -98,7 +98,7 @@ export default function PinnedSubheaderList() {
           transactions.slice(page * rowsPerPage, (page + 1) * rowsPerPage)
         );
 
-        console.log("Transactions:", itemsToShow);
+        console.log("Transactions:", transactions);
         setFlag(true);
       })
       .catch((error) => {
@@ -108,7 +108,10 @@ export default function PinnedSubheaderList() {
 
   React.useEffect(() => {
     DataApi();
-  }, []);
+    setApiUrl(options[activeIndex].ScanLink);
+    SetApiKey(options[activeIndex].ScanLink);
+    console.log(1);
+  }, [activeIndex]);
 
   return (
     <>
@@ -142,7 +145,7 @@ export default function PinnedSubheaderList() {
                 component="div"
                 count={items.length} // Ensure this represents the total number of items.
                 page={page}
-                onPageChange={handleChangePage}
+                onPageChange={handlePageChange}
                 rowsPerPage={rowsPerPage}
                 rowsPerPageOptions={[rowsPerPage]}
               />
