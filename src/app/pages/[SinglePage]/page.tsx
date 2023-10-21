@@ -8,68 +8,94 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { fetchTransaction } from "@wagmi/core";
+import { type Transaction } from "viem";
 
 import styles from "./page.module.scss";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { useRouter } from "next/router";
 const SinglePageDetail = ({ params }: { params: { SinglePage: string } }) => {
+  interface TxData {
+    accessList: [];
+    blockHash: "0x183d2f73c320a0f5a00af512e16f325aa2b2bf30fa73c9fe90b1b9ae4c69e6df";
+    blockNumber: 9899515n;
+    chainId: 5;
+    from: "0x645d85678c2d4c56c17f3579a278c2be2d73119c";
+    gas: 40993n;
+    gasPrice: 1500000016n;
+    hash: "0x596104426ff8fd56e0488099cfe1829b45aaab323af1ef9cf8d610cae7af57ac";
+    input: "0x";
+    maxFeePerGas: 1500000022n;
+    maxPriorityFeePerGas: 1500000000n;
+    nonce: 10;
+    r: "0x65c002b47dec55620777c8f0d99dc360a3a4fdb2fb8c4aae9ef66849887cec36";
+    s: "0x8babdb4df6f98ec65e3d323e3eea20b2fa3839c95d64a2da86d7cfdde2557e3";
+    to: "0xa43624b7472c37b1e1884645a3d04710afcd8eb5";
+    transactionIndex: 7;
+    type: "eip1559";
+    v: 0n;
+    value: 1000000000000000000n;
+  }
+  const [transactionData, setTransactionData] = React.useState<Transaction>();
   const data = params.SinglePage;
   console.log(data);
-  function createData(name: string, calories: string, toolpick: string) {
+  function createData(name: any, calories: any, toolpick: any) {
     return { name, calories, toolpick };
   }
+  async function Fetchtransaction() {
+    const txhash = data.slice(2);
+    const transaction = await fetchTransaction({
+      hash: `0x${txhash}`,
+    });
+    setTransactionData(transaction);
+    console.log(transaction);
+  }
+  React.useEffect(() => {
+    Fetchtransaction();
+  }, []);
 
-  const rows2 = [
+  const rows = [
     createData(
       "transection Hash",
-      " 0xa9f26007f3880c6d5da031f9817ae920db3cdb9c55f34034efd8b3e64eaa0736",
+      data,
       "A TxHash or transaction hash is a unique 66-characters identifier that is generated whenever a transaction is executed."
     ),
     createData("Status:", " 0", "The status of the transaction."),
-    createData("Block:", " 48794158", "Number of blocks validated since"),
     createData(
-      "Timestamp:",
-      " 23 secs ago (Oct-16-2023 05:54:35 PM +UTC)",
-      "The date and time at which a transaction is validated."
+      "Block:",
+      transactionData?.blockNumber?.toString(),
+      "Number of blocks validated since"
     ),
+  ];
+  const rows2 = [
     createData(
       "From:",
-      " 0xb652158f67b9fb39c29412d6f8e1c563ff6724f2",
+      transactionData?.from,
       "The sending party of the transaction."
     ),
     createData(
       "Interacted With (To):",
-      " 0x1d0360bac7299c86ec8e99d0c1c9a95fefaf2a11",
+      transactionData?.to?.toString(),
       "The receiving party of the transaction (could be a contract address)."
     ),
 
     createData(
       "Transaction Fee:",
-      "0.048828716313062814 MATIC ($0.03)",
+      transactionData?.gas.toString(),
       "Amount paid to the miner for processing the transaction."
     ),
     createData(
       "Value:",
-      "0.048828716313062814 MATIC ($0.03)",
+      transactionData?.value.toString(),
       "The value being transacted in MATIC and fiat value. Note: You can click the fiat value (if available) to see historical value at the time of transaction."
     ),
     createData(
       "Gas Price:",
-      "0.000000134568864838 MATIC (134.568864838 Gwei)",
+      transactionData?.gasPrice?.toString(),
       "Cost per unit of gas specified for the transaction, in MATIC and Gwei. The higher the gas price the higher chance of getting included in a block."
     ),
-    createData("Gas Limit & Usage by Txn:", "368,130 | 362,853 (98.57%)", ""),
-    createData(
-      "Gas Fees:",
-      "Base: 104.568864838 Gwei |Max: 163.491848271 Gwei |Max Priority: 30 Gwei",
-      ""
-    ),
 
-    createData(
-      "urnt & Txn Savings Fees:",
-      "🔥 Burnt: 0.037943126313062814 MATIC)💸 Txn Savings: 0.010494791307614349 MATIC",
-      ""
-    ),
+    createData("Gas Fees:", transactionData?.maxFeePerGas, ""),
   ];
   return (
     <>
@@ -88,67 +114,134 @@ const SinglePageDetail = ({ params }: { params: { SinglePage: string } }) => {
 
         <Grid container className={styles.maindatacard}>
           <Grid xs={12}>
-            <Box>
-              <Card
-                className={styles.datacard}
-                sx={{
-                  borderRadius: "12px",
-                  padding: "50px",
-                }}
-              >
-                <TableContainer component={Paper}>
-                  <Table
-                    sx={{
-                      minWidth: 650,
-                      // "& .MuiTableCell-root": {
-                      //   border: " solid white 1px",
-                      // },
-                    }}
-                    aria-label="simple table"
-                    size="small"
-                  >
-                    <TableBody>
-                      {rows2.map((row) => (
-                        <TableRow
-                          key={row.name}
+            <Card
+              className={styles.datacard}
+              sx={{
+                border: "0 solid ",
+                borderRadius: "8px",
+              }}
+            >
+              <TableContainer component={Paper}>
+                <Table
+                  sx={{
+                    minWidth: 650,
+                    "& .MuiTableCell-root": {
+                      border: 0,
+                    },
+                  }}
+                  aria-label="simple table"
+                >
+                  <TableHead>
+                    <TableRow
+                      sx={{
+                        border: 0,
+                      }}
+                    >
+                      <TableCell
+                        sx={{
+                          fontSize: "30px",
+                          "&:last-child td, &:last-child th": { border: 0 },
+                          border: 0,
+                        }}
+                      >
+                        Overview
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map((row) => (
+                      <TableRow
+                        key={row.name}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                          border: 0,
+                        }}
+                      >
+                        <TableCell
+                          component="th"
+                          scope="row"
                           sx={{
-                            // "&:last-child td, &:last-child th": { border: 0 },
-                            border: 0,
+                            width: "300px",
+                            fontSize: "20px",
                           }}
                         >
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            sx={{
-                              width: "300px",
-                              fontSize: "20px",
-                            }}
+                          <Tooltip
+                            title={<Typography>{row.toolpick}</Typography>}
                           >
-                            <Tooltip
-                              title={<Typography>{row.toolpick}</Typography>}
-                            >
-                              <IconButton>
-                                <HelpOutlineIcon />
-                              </IconButton>
-                            </Tooltip>
-                            {row.name}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              width: "600px",
-                              fontSize: "16px",
-                              color: "	#888888",
-                            }}
+                            <IconButton>
+                              <HelpOutlineIcon />
+                            </IconButton>
+                          </Tooltip>
+                          {row.name}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            width: "600px",
+                            fontSize: "16px",
+                            color: "	#888888",
+                          }}
+                        >
+                          {row.calories}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <Divider />
+              <Box sx={{ height: "150px" }}></Box>
+              <Divider />
+              <TableContainer component={Paper}>
+                <Table
+                  sx={{
+                    minWidth: 650,
+                    "& .MuiTableCell-root": {
+                      border: 0,
+                    },
+                  }}
+                  aria-label="simple table"
+                >
+                  <TableBody>
+                    {rows2.map((row) => (
+                      <TableRow
+                        key={row.name}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                          border: 0,
+                        }}
+                      >
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          sx={{
+                            width: "300px",
+                            fontSize: "20px",
+                          }}
+                        >
+                          <Tooltip
+                            title={<Typography>{row.toolpick}</Typography>}
                           >
-                            {row.calories}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Card>
-            </Box>
+                            <IconButton>
+                              <HelpOutlineIcon />
+                            </IconButton>
+                          </Tooltip>
+                          {row.name}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            width: "600px",
+                            fontSize: "16px",
+                            color: "	#888888",
+                          }}
+                        >
+                          {row.calories}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Card>
           </Grid>
         </Grid>
       </Box>

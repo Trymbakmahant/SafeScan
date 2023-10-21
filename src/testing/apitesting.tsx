@@ -115,8 +115,7 @@
 //           hello();
 //         }}
 //       >
-//         {" "}
-//         lfjwpojfjow eofdwo iofiouwh fioof{" "}
+//         lfjwpojfjow eofdwo iofiouwh fioof
 //       </button>
 //     </div>
 //   );
@@ -126,7 +125,7 @@
 
 /////////////////////////////////////////////////// safe creation info ///////////////////////////////
 // import React from "react";
-// import { getSafeCreationInfo } from "../utils/Safe-Api/safeApp";
+// import { getSafesByOwner } from "../utils/Safe-Api/safeApp";
 // import { useWalletClient, useAccount } from "wagmi";
 // import { useEthersSigner } from "../utils/hooks/ethersSigner";
 // import { txServiceList } from "../utils/Safe-Api/ServciceData";
@@ -137,12 +136,13 @@
 //   const { address } = useAccount();
 
 //   async function hello() {
-//     const safeTxHash = "0xa43624b7472c37B1E1884645a3D04710afCD8eB5";
+//     const safeTxHash = "0xbC2eFF3EA913317e523EB65A579d723334F9f135";
 //     try {
-//       const ans = await getSafeCreationInfo(
+//       const ans = await getSafesByOwner(
+//         safeTxHash,
 //         signer,
-//         txServiceList.Goerli,
-//         safeTxHash
+
+//         txServiceList.Goerli
 //       );
 //       console.log(ans);
 //     } catch (e) {
@@ -214,32 +214,97 @@
 // export default apitesting;
 
 /////////////////////////// All transaction  testing //////////////////////////
+// import React from "react";
+// import {
+//   AllTransactionList,
+//   getDataWithTransactionHash,
+// } from "../utils/Safe-Api/safeApp";
+// import { useWalletClient, useAccount } from "wagmi";
+// import { useEthersSigner } from "../utils/hooks/ethersSigner";
+// import { txServiceList } from "../utils/Safe-Api/ServciceData";
+// import { fetchTransaction } from "@wagmi/core";
+
+// const apitesting = () => {
+//   const { data: walletClient, isError, isLoading } = useWalletClient();
+//   const signer: any = useEthersSigner();
+//   const { address } = useAccount();
+
+//   async function hello() {
+//     const safeTxHash =
+//       "0x596104426ff8fd56e0488099cfe1829b45aaab323af1ef9cf8d610cae7af57ac";
+//     const safeAddress = "0xa43624b7472c37B1E1884645a3D04710afCD8eB5";
+//     try {
+//       const transaction = await fetchTransaction({
+//         hash: safeTxHash,
+//       });
+//       console.log(transaction);
+//     } catch (e) {
+//       console.log(e);
+//     }
+//   }
+
+//   return (
+//     <div>
+//       <button
+//         onClick={() => {
+//           hello();
+//         }}
+//       >
+//         Testings{" "}
+//       </button>
+//     </div>
+//   );
+// };
+
+// export default apitesting;
+
+/////////////////////////// All transaction  of creater contract //////////////////////////
 import React from "react";
 import { AllTransactionList } from "../utils/Safe-Api/safeApp";
 import { useWalletClient, useAccount } from "wagmi";
 import { useEthersSigner } from "../utils/hooks/ethersSigner";
-import { txServiceList } from "../utils/Safe-Api/ServciceData";
-import { fetchTransaction } from "@wagmi/core";
+import { useEthersProvider } from "../utils/hooks/ethersProvider";
+import axios from "axios";
+import { ProviderLink } from "../utils/Safe-Api/ServciceData";
+const { ethers } = require("ethers");
 
 const apitesting = () => {
   const { data: walletClient, isError, isLoading } = useWalletClient();
   const signer: any = useEthersSigner();
-  const { address } = useAccount();
 
   async function hello() {
     const safeTxHash =
       "0x596104426ff8fd56e0488099cfe1829b45aaab323af1ef9cf8d610cae7af57ac";
     const safeAddress = "0xa43624b7472c37B1E1884645a3D04710afCD8eB5";
-    try {
-      const ans = await AllTransactionList(
-        signer,
-        txServiceList.Goerli,
-        safeAddress
-      );
-      console.log(ans);
-    } catch (e) {
-      console.log(e);
-    }
+
+    const apiKey = "26TJW7XYJ3UUYQ7T9E3PV4TDZR748TR84V";
+    const address = "0xa6B71E26C5e0845f74c812102Ca7114b6a896AB2";
+
+    const apiUrl = "https://api.etherscan.io/api";
+    const action = "txlist"; // For normal transactions
+    const module = "account";
+    const startBlock = "0"; // Start from block 0
+    const endBlock = "latest"; // Up to the latest block
+
+    axios
+      .get(apiUrl, {
+        params: {
+          module,
+          action,
+          address,
+          startblock: startBlock,
+          endblock: endBlock,
+          sort: "desc", // To get the most recent transactions first
+          apikey: apiKey,
+        },
+      })
+      .then((response) => {
+        const transactions = response.data.result;
+        console.log("Transactions:", transactions[0]);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   }
 
   return (
@@ -256,3 +321,13 @@ const apitesting = () => {
 };
 
 export default apitesting;
+
+// https://api.etherscan.io/api
+//    ?module=logs
+//    &action=getLogs
+//    &address=0xa6B71E26C5e0845f74c812102Ca7114b6a896AB2
+//    &fromBlock=12878196
+//    &toBlock=12878196
+//    &page=1
+//    &offset=1000
+//    &apikey=26TJW7XYJ3UUYQ7T9E3PV4TDZR748TR84V

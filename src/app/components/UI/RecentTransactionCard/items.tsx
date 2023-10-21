@@ -50,16 +50,24 @@ const items = [
   { id: 2, receiver: "Alice", sender: "Bob", amount: "40" },
 ];
 
-const ItemsPage: React.FC = () => {
+interface ItemsProps {
+  chain: string;
+}
+
+const ItemsPage: React.FC<ItemsProps> = ({ chain }) => {
   const [page, setPage] = React.useState(0);
+  const [items, setItems] = React.useState([]);
   const rowsPerPage = 8;
 
   const handleChangePage = (event: any, newPage: number) => {
     setPage(newPage); // Ensure this updates the page state correctly.
   };
+  let itemsToShow = items;
 
+  if (items.length > 8) {
+    itemsToShow = items.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
+  }
   // Filter the items to only show the specified number of items per page
-  let itemsToShow = items.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
 
   return (
     <Container>

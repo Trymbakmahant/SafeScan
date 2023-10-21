@@ -28,7 +28,7 @@ export default function PinnedSubheaderList() {
     <>
       <Card sx={{ maxWidth: "80%", maxHeight: "40%" }}>
         <CarouselToggleBar options={options} onChange={handleOptionChange} />
-        <Table />
+        <Table chain="woej" />
       </Card>
     </>
   );

@@ -52,13 +52,7 @@ const CarouselToggleBar: React.FC<CarouselToggleBarProps> = ({
           scrollButtons="auto"
         >
           {options.map((option, index) => (
-            <Tab
-              key={index}
-              label={option.label}
-              onClick={() => {
-                switchNetwork(option.value);
-              }}
-            />
+            <Tab key={index} label={option.label} />
           ))}
         </Tabs>
       )}
