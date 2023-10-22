@@ -17,6 +17,7 @@ const CustomPagination: React.FC<PaginationProps> = ({
     value: number
   ) => {
     onChange(value);
+    console.log(value);
   };
 
   return (

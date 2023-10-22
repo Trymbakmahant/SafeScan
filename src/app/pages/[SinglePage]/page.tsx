@@ -66,8 +66,7 @@ const SinglePageDetail = ({ params }: { params: { SinglePage: string } }) => {
       transactionData?.blockNumber?.toString(),
       "Number of blocks validated since"
     ),
-  ];
-  const rows2 = [
+
     createData(
       "From:",
       transactionData?.from,
@@ -94,8 +93,20 @@ const SinglePageDetail = ({ params }: { params: { SinglePage: string } }) => {
       transactionData?.gasPrice?.toString(),
       "Cost per unit of gas specified for the transaction, in MATIC and Gwei. The higher the gas price the higher chance of getting included in a block."
     ),
+    createData(
+      "maxFeePerGas :",
+      transactionData?.maxFeePerGas?.toString(),
+      "Cost per unit of gas specified for the transaction, in MATIC and Gwei. The higher the gas price the higher chance of getting included in a block."
+    ),
 
-    createData("Gas Fees:", transactionData?.maxFeePerGas, ""),
+    createData("Gas:", transactionData?.gas?.toString(), ""),
+
+    createData(
+      "Transection Index :",
+      transactionData?.transactionIndex?.toString(),
+      ""
+    ),
+    createData("Type:", transactionData?.type?.toString(), " "),
   ];
   return (
     <>
@@ -123,11 +134,9 @@ const SinglePageDetail = ({ params }: { params: { SinglePage: string } }) => {
             >
               <TableContainer component={Paper}>
                 <Table
+                  size="medium"
                   sx={{
                     minWidth: 650,
-                    "& .MuiTableCell-root": {
-                      border: 0,
-                    },
                   }}
                   aria-label="simple table"
                 >
@@ -150,59 +159,6 @@ const SinglePageDetail = ({ params }: { params: { SinglePage: string } }) => {
                   </TableHead>
                   <TableBody>
                     {rows.map((row) => (
-                      <TableRow
-                        key={row.name}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                          border: 0,
-                        }}
-                      >
-                        <TableCell
-                          component="th"
-                          scope="row"
-                          sx={{
-                            width: "300px",
-                            fontSize: "20px",
-                          }}
-                        >
-                          <Tooltip
-                            title={<Typography>{row.toolpick}</Typography>}
-                          >
-                            <IconButton>
-                              <HelpOutlineIcon />
-                            </IconButton>
-                          </Tooltip>
-                          {row.name}
-                        </TableCell>
-                        <TableCell
-                          sx={{
-                            width: "600px",
-                            fontSize: "16px",
-                            color: "	#888888",
-                          }}
-                        >
-                          {row.calories}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <Divider />
-              <Box sx={{ height: "150px" }}></Box>
-              <Divider />
-              <TableContainer component={Paper}>
-                <Table
-                  sx={{
-                    minWidth: 650,
-                    "& .MuiTableCell-root": {
-                      border: 0,
-                    },
-                  }}
-                  aria-label="simple table"
-                >
-                  <TableBody>
-                    {rows2.map((row) => (
                       <TableRow
                         key={row.name}
                         sx={{

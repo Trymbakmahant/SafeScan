@@ -300,7 +300,7 @@ const apitesting = () => {
       })
       .then((response) => {
         const transactions = response.data.result;
-        console.log("Transactions:", transactions[0]);
+        console.log("Transactions:", transactions);
       })
       .catch((error) => {
         console.error("Error:", error);
