@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Account } from "./components/wagmiCode/Account";
 import { Balance } from "./components/wagmiCode/Balance";
 import { BlockNumber } from "./components/wagmiCode/BlockNumber";
@@ -26,8 +26,16 @@ import LandingPage from "./pages/LandingPage/page";
 import Navbar from "./pages/Navbar";
 import Tx from "./TransactionDetail/[tx]";
 import SearchPage from "./pages/SearchPage/page";
+import { useQuery } from "@apollo/client";
+import { GET_NEXTID_INFO } from "../graphql/queries";
 
 function Page() {
+  const { data, loading } = useQuery(GET_NEXTID_INFO);
+  useEffect(() => {
+    if (loading) return;
+    console.log(data);
+  }, [loading]);
+
   const inputref = useRef<HTMLInputElement | null>(null);
   const txurl = "./pages/TransactionDetail/[tx]";
   return (
